@@ -32,6 +32,12 @@ variable "name" {
 
 variable "master_authorized_networks" {
   type = list(map(string))
+  default = [
+    {
+      cidr_block   = "0.0.0.0/0"
+      display_name = "Open for all"
+    }
+  ]
 }
 
 variable "enable_private_endpoint" {
@@ -55,11 +61,20 @@ variable "subnet_private_access" {
 variable "subnet_ip_range" {
   type        = string
   description = "The range of IP addresses belonging to this subnetwork secondary range. Provide this property when you create the subnetwork. Ranges must be unique and non-overlapping with all primary and secondary IP ranges within a network. Only IPv4 is supported"
+  default     = "10.1.0.0/28"
 }
 
 variable "secondary_ip_ranges" {
   description = "An array of configurations for secondary IP ranges for VM instances contained in this subnetwork. The primary IP of such VM must belong to the primary ipCidrRange of the subnetwork. The alias IPs may belong to either primary or secondary ranges"
   type        = list(map(string))
+  default = [{
+    range_name    = "k8s-pod-range"
+    ip_cidr_range = "10.48.0.0/14"
+    },
+    {
+      range_name    = "k8s-service-range"
+      ip_cidr_range = "10.52.0.0/20"
+  }]
 }
 
 variable "node_count" {
