@@ -31,5 +31,8 @@ module "gke_regula" {
       spot         = var.spot
     },
   ]
+  depends_on = [
+    module.vpc
+  ]
 }
 
