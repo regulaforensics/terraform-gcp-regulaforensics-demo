@@ -12,6 +12,17 @@
   export GOOGLE_APPLICATION_CREDENTIALS="/host/path/credentials.json"
 ```
 
+### Make sure all your **google apis** are enabled
+
+- First pass required variables **project_id** 
+- Run following commands
+  
+```bash
+cd project
+terraform init
+terraform apply
+```
+
 ### Create terraform main.tf file and pass required variables **project_id**, **region**, **zones** and **name**
 
 ```hcl
@@ -25,6 +36,19 @@ module "gke_cluster" {
   enable_faceapi    = true
 }
 ```
+### To access your cluster, add the following resource
+```hcl
+resource "local_file" "kubeconfig" {
+  content  = module.gke_cluster.config
+  filename = "${path.module}/kubeconfig"
+
+  depends_on = [
+    module.gke_cluster
+  ]
+}
+```
+This will create a kubernetes config file, to access your cluster
+
 ## Add Regula license for your chart
 ```hcl
 data "template_file" "docreader_license" {
