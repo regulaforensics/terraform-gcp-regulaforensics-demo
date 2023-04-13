@@ -21,16 +21,17 @@ module "gke_regula" {
 
   node_pools = [
     {
-      disk_size_gb = var.disk_size_gb
-      disk_type    = var.disk_type
       name         = var.name
+      machine_type = var.machine_type
+      node_count   = var.node_count
+      disk_type    = var.disk_type
+      disk_size_gb = var.disk_size_gb
       autoscaling  = true
       auto_upgrade = true
-      node_count   = var.node_count
-      machine_type = var.machine_type
       spot         = var.spot
     },
   ]
+
   depends_on = [
     module.vpc
   ]

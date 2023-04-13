@@ -14,7 +14,28 @@ provider "helm" {
   }
 }
 
+resource "helm_release" "faceapi" {
+  count      = var.enable_faceapi == true ? 1 : 0
+  name       = "faceapi"
+  repository = "https://regulaforensics.github.io/helm-charts"
+  chart      = "faceapi"
 
+  values = [
+    var.faceapi_values
+  ]
+
+}
+
+resource "kubernetes_secret" "face_api_license" {
+  count = var.enable_faceapi == true ? 1 : 0
+  metadata {
+    name = "face-api-license"
+  }
+  type = "Opaque"
+  binary_data = {
+    "regula.license" = var.face_api_license
+  }
+}
 
 resource "helm_release" "docreader" {
   count      = var.enable_docreader == true ? 1 : 0

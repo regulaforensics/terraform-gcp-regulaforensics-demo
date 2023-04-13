@@ -1,9 +1,3 @@
-variable "credentials" {
-  type        = string
-  description = "Name of your file credentials"
-  default     = ""
-}
-
 variable "project_id" {
   type        = string
   description = "Id of your project"

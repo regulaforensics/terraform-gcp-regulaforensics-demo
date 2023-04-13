@@ -1,16 +1,19 @@
 resource "google_compute_router" "router" {
   name    = var.name
+  project = var.project_id
   region  = var.region
   network = module.vpc.network_id
+
   depends_on = [
     module.vpc
   ]
 }
 
 resource "google_compute_router_nat" "nat" {
-  name   = var.name
-  router = google_compute_router.router.name
-  region = var.region
+  name    = var.name
+  project = var.project_id
+  router  = google_compute_router.router.name
+  region  = var.region
 
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   nat_ip_allocate_option             = "MANUAL_ONLY"
@@ -21,6 +24,7 @@ resource "google_compute_router_nat" "nat" {
   }
 
   nat_ips = [google_compute_address.nat.self_link]
+
   depends_on = [
     module.vpc
   ]
@@ -28,9 +32,11 @@ resource "google_compute_router_nat" "nat" {
 
 resource "google_compute_address" "nat" {
   region       = var.region
+  project      = var.project_id
   name         = var.name
   address_type = "EXTERNAL"
   network_tier = "PREMIUM"
+
   depends_on = [
     module.vpc
   ]
