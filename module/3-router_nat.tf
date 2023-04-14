@@ -5,7 +5,8 @@ resource "google_compute_router" "router" {
   network = module.vpc.network_id
 
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.project
   ]
 }
 
@@ -26,7 +27,8 @@ resource "google_compute_router_nat" "nat" {
   nat_ips = [google_compute_address.nat.self_link]
 
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.project
   ]
 }
 
@@ -38,6 +40,7 @@ resource "google_compute_address" "nat" {
   network_tier = "PREMIUM"
 
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.project
   ]
 }

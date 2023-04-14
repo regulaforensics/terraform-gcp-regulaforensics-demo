@@ -7,7 +7,7 @@ module "gke_auth" {
   use_private_endpoint = false
 
   depends_on = [
-    module.gke_regula
+    module.gke_regula,
+    module.project
   ]
 }
-

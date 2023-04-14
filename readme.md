@@ -2,8 +2,10 @@
 ## Prerequisites
 
 **GCP**
-- Download your **credentials.json** file for using Google API
-- Place credentials to folder with your module
+- Create GCP project
+- Create service account (https://cloud.google.com/iam/docs/service-accounts-create)
+- Create and download service account key **credentials.json** file for using Google API (https://cloud.google.com/iam/docs/keys-create-delete)
+- Place credentials to the folder with your module
 
 ## Preparation Steps
 ### Export AWS credentials
@@ -12,16 +14,10 @@
   export GOOGLE_APPLICATION_CREDENTIALS="/host/path/credentials.json"
 ```
 
-### Make sure all your **google apis** are enabled
+### Enable Cloud Resource Manager 
 
-- First pass required variables **project_id** 
-- Run following commands
-  
-```bash
-cd project
-terraform init
-terraform apply
-```
+- Add your **project_id** to the following Url and enable cloud resource manager API https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=<PROJECT_ID>
+
 
 ### Create terraform main.tf file and pass required variables **project_id**, **region**, **zones** and **name**
 
@@ -107,3 +103,31 @@ module "gke_cluster" {
   ...
 }
 ```
+
+
+
+## **Inputs**
+| Name                          | Description                                                                           | Type          |Default                                |
+| ------------------------------|---------------------------------------------------------------------------------------|---------------|---------------------------------------|
+| project_id                    | The region to host the cluster in (optional if zonal cluster / required if regional)  | string        | null                                  |
+| region                        | AWS Region                                                                            | string        | null                                  |
+| regional                      | Whether is a regional cluster (zonal cluster if set false                             | bool          | false                                 |
+| zones                         | Zones to deploy cluster                                                               | string        | null                                  |
+| name                          | Name of your cluster                                                                  | list(string)  | null                                  |
+| master_authorized_networks    | List of master authorized networks                                                    |list(map(string)) | [{cidr_block="0.0.0.0/0",display_name="Open for all"}]|
+| enable_private_endpoint       | Whether the master's internal IP address is used as the cluster endpoint              | bool          | false                                 |
+| enable_private_nodes          | Whether nodes have internal IP addresses only                                         | bool          | true                                  |
+| subnet_private_access         | When enabled, VMs in this subnetwork without external IP addresses                    | bool          | true                                  |
+| subnet_ip_range               | The range of IP addresses belonging to this subnetwork secondary range                | string        | 10.1.0.0/28                           |
+| secondary_ip_ranges           |An array of configurations for secondary IP ranges for VM instances contained in this subnetwork | list(map(string))   | [{range_name="k8s-pod-range" ip_cidr_range = "10.48.0.0/14"},{range_name="k8s-service-range" ip_cidr_range = "10.52.0.0/20"}]   |
+| node_count                    | The number of nodes in the nodepool when autoscaling is false                         | string        | 1                                     |
+| disk_size_gb                  | Size of the disk attached to each node, specified in GB                               | string        | 100                                   |
+| disk_type                     | Type of the disk attached to each node                                                | string        | pd-standard                           |
+| machine_type                  | The name of a Google Compute Engine machine type                                      | string        | e2-standard-4                         |
+| spot                          | A boolean that represents whether the underlying node VMs are spot                    | bool          | true                                  |
+| enable_docreader              | Deploy Docreader helm chart                                                           | bool          | false                                 |
+| docreader_values              | Docreader helm values                                                                 | string        | null                                  |
+| docreader_license             | Docreader Regula license file                                                         | string        | null                                  |
+| enable_faceapi                | Deploy Faceapi helm chart                                                             | bool          | false                                 |
+| faceapi_values                | Faceapi helm values                                                                   | string        | null                                  |
+| face_api_license              | Faceapi Regula license file                                                           | string        | null                                  |

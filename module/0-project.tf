@@ -10,3 +10,7 @@ module "project" {
     "iam.googleapis.com"
   ]
 }
+
+data "google_project" "project" {
+  project_id = var.project_id
+}

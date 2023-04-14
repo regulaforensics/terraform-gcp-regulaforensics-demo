@@ -19,4 +19,8 @@ module "vpc" {
   secondary_ranges = {
     private-subnet = var.secondary_ip_ranges
   }
+
+  depends_on = [
+    module.project
+  ]
 }

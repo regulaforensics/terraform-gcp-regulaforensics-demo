@@ -1,6 +1,4 @@
-data "google_project" "project" {
-  project_id = var.project_id
-}
+data "google_client_config" "default" {}
 
 module "gke_regula" {
   source                  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
@@ -33,7 +31,7 @@ module "gke_regula" {
   ]
 
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.project
   ]
 }
-

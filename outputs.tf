@@ -6,4 +6,5 @@ output "cluster_name" {
 output "config" {
   description = "Cluster name"
   value       = module.gke_cluster.config
+  sensitive   = true
 }
