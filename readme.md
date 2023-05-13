@@ -1,14 +1,15 @@
-# This module is intended to create GCP GKE cluster and for further Regula Forensics Helm charts deployment
+# This module is intended to create a GCP GKE cluster and for further deployment of Regula Forensics Helm charts 
 
 ## Prerequisites
 
 **GCP**
-- Create GCP project
-- Create service account (https://cloud.google.com/iam/docs/service-accounts-create)
-- Create and download service account key **credentials.json** file for using Google API (https://cloud.google.com/iam/docs/keys-create-delete)
-- Place credentials to the folder with your module
+- Create a GCP project.
+- Create a service account (https://cloud.google.com/iam/docs/service-accounts-create).
+- Create and download the service account key file **credentials.json** for using Google API (https://cloud.google.com/iam/docs/keys-create-delete).
+- Place the credentials in the folder with your module.
 
 ## Preparation Steps
+
 ### Export AWS credentials
 
 ```bash
@@ -20,7 +21,7 @@
 - Add your **project_id** to the following Url and enable cloud resource manager API: https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=<PROJECT_ID>. 
 
 
-### Create a terraform main.tf file and pass the required variables **project_id**, **region**, **zones**, and **name**:
+### Create a terraform main.tf file and pass the required variables **project_id**, **region**, **zones**, and **name**
 
 ```hcl
 module "gke_cluster" {
@@ -34,7 +35,7 @@ module "gke_cluster" {
 }
 ```
 
-### To access your cluster, add the following resource:
+### To access your cluster, add the following resource
 
 ```hcl
 resource "local_file" "kubeconfig" {
@@ -49,7 +50,7 @@ resource "local_file" "kubeconfig" {
 
 This will create a kubernetes config file to access your cluster.
 
-## Add the Regula license for your chart:
+## Add the Regula license for your chart
 
 ```hcl
 data "template_file" "docreader_license" {
@@ -69,7 +70,7 @@ module "gke_cluster" {
   ...
 }
 ```
-## Execute terraform template
+## Execute the Terraform template
 
 ```bash
   terraform init
@@ -77,26 +78,26 @@ module "gke_cluster" {
   terraform apply
 ```
 
-## Optional. Custom Helm values
+## Optional: Custom Helm values
 
 ### Custom values for docreader chart
 
-If you are about to deploy docreader Helm chart with custom values:
+If you are deploying the docreader Helm chart with custom values:
 
-- create **values.yml** in the folder named by application (i.e. values/docreader/values.yml)
-- pass the file location to the `template_file` of `data source` block:
+- Create a **values.yml** file in a folder named after the application (for example, values/docreader/values.yml).
+- Pass the file location to the `template_file` of `data source` block:
 ```hcl
 data "template_file" "docreader_values" {
   template = file("${path.module}/values/docreader/values.yml")
 }
 ```
 
-### Custom values for faceapi chart
+### Custom values for the faceapi chart
 
-If you are about to deploy the faceapi Helm chart with custom values:
+If you are deploying the faceapi Helm chart with custom values:
 
-- create **values.yml** in the folder named by application (i.e. values/faceapi/values.yml)
-- pass the file location to the `template_file` of `data source` block:
+- Create a **values.yml** file in a folder named after the application (for example, values/faceapi/values.yml).
+- Pass the file location to the `template_file` of `data source` block:
 ```hcl
 data "template_file" "faceapi_values" {
   template = file("${path.module}/values/faceapi/values.yml")
