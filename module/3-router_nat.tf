@@ -10,22 +10,19 @@ resource "google_compute_router" "router" {
   ]
 }
 
-resource "google_compute_router_nat" "nat" {
-  name    = var.name
-  project = var.project_id
-  router  = google_compute_router.router.name
-  region  = var.region
-
+module "cloud-nat" {
+  source                             = "terraform-google-modules/cloud-nat/google"
+  version                            = "~> 1.2"
+  project_id                         = var.project_id
+  region                             = var.region
+  router                             = google_compute_router.router.name
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-  nat_ip_allocate_option             = "MANUAL_ONLY"
-
-  subnetwork {
-    name                    = "private-subnet"
-    source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
-  }
-
+  subnetworks = [{
+    name                     = "private-subnet"
+    source_ip_ranges_to_nat  = ["ALL_IP_RANGES"]
+    secondary_ip_range_names = []
+  }]
   nat_ips = [google_compute_address.nat.self_link]
-
   depends_on = [
     module.vpc,
     module.project
