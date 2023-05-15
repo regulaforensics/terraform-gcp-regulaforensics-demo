@@ -22,22 +22,22 @@ module "cloud-nat" {
     source_ip_ranges_to_nat  = ["ALL_IP_RANGES"]
     secondary_ip_range_names = []
   }]
-  nat_ips = [google_compute_address.nat.self_link]
+  # nat_ips = [google_compute_address.nat.self_link]
   depends_on = [
     module.vpc,
     module.project
   ]
 }
 
-resource "google_compute_address" "nat" {
-  region       = var.region
-  project      = var.project_id
-  name         = var.name
-  address_type = "EXTERNAL"
-  network_tier = "PREMIUM"
+# resource "google_compute_address" "nat" {
+#   region       = var.region
+#   project      = var.project_id
+#   name         = var.name
+#   address_type = "EXTERNAL"
+#   network_tier = "PREMIUM"
 
-  depends_on = [
-    module.vpc,
-    module.project
-  ]
-}
+#   depends_on = [
+#     module.vpc,
+#     module.project
+#   ]
+# }
