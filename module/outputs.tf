@@ -4,6 +4,6 @@ output "cluster_name" {
 }
 
 output "config" {
-  description = "Cluster name"
+  description = "Cluster config"
   value       = module.gke_auth.kubeconfig_raw
 }
